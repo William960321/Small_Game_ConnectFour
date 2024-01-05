@@ -20,14 +20,12 @@ public class ConnectFourGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 500);
 
-        
-
         buttons = new JButton[ROWS][COLUMNS];
         board = new char[ROWS][COLUMNS];
 
         initializeBoard();
         setupUI();
-    
+
         pack();
         setLocationRelativeTo(null); // 居中顯示視窗
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,7 +43,7 @@ public class ConnectFourGUI extends JFrame {
 
     private void setupUI() {
         setLayout(new GridLayout(ROWS + 1, COLUMNS));
-    
+
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
                 buttons[i][j] = new JButton();
@@ -57,23 +55,23 @@ public class ConnectFourGUI extends JFrame {
         }
 
         // Set the content pane with a JLabel to use a background image
-        // setContentPane(new JLabel(new ImageIcon("C:/Users/user/Desktop/  sg/src/ConnectFourGUI.java")));
-    
+        // setContentPane(new JLabel(new ImageIcon("C:/Users/user/Desktop/
+        // sg/src/ConnectFourGUI.java")));
+
         JButton restartButton = new JButton("Restart");
         restartButton.addActionListener(e -> restartGame());
         add(restartButton);
-    
+
         switchPlayerButton = new JButton("Switch Player");
         switchPlayerButton.addActionListener(e -> switchPlayer());
         add(switchPlayerButton, BorderLayout.AFTER_LINE_ENDS);
-        
+
         currentPlayerLabel = new JLabel("Current Player: " + (currentPlayer == 'X' ? "red" : "yellow"));
         add(currentPlayerLabel, BorderLayout.PAGE_END);
-    
+
         setVisible(true);
         enableTopRowButtons();
     }
-    
 
     private void restartGame() {
         initializeBoard();
@@ -97,77 +95,75 @@ public class ConnectFourGUI extends JFrame {
     private boolean checkWin(int row, int column) {
         return checkHorizontal(row) || checkVertical(column) || checkDiagonal(row, column);
     }
-    
+
     private boolean checkHorizontal(int row) {
         char color = currentPlayer;
         int count = 0;
-    
+
         for (int j = 0; j < COLUMNS; j++) {
             if (board[row][j] == color) {
                 count++;
             } else {
                 count = 0;
             }
-    
+
             if (count == 4) {
-                return true;  // Four consecutive discs found horizontally
+                return true; // Four consecutive discs found horizontally
             }
         }
-    
+
         return false;
     }
-    
+
     private boolean checkVertical(int column) {
         char color = currentPlayer;
         int count = 0;
-    
+
         for (int i = 0; i < ROWS; i++) {
             if (board[i][column] == color) {
                 count++;
             } else {
                 count = 0;
             }
-    
+
             if (count == 4) {
-                return true;  // Four consecutive discs found vertically
+                return true; // Four consecutive discs found vertically
             }
         }
-    
+
         return false;
     }
-    
+
     private boolean checkDiagonal(int row, int column) {
         char color = currentPlayer;
-    
+
         // Check diagonally from bottom-left to top-right
         for (int i = ROWS - 1; i >= 3; i--) {
             for (int j = 0; j < COLUMNS - 3; j++) {
                 if (board[i][j] == color &&
-                    board[i - 1][j + 1] == color &&
-                    board[i - 2][j + 2] == color &&
-                    board[i - 3][j + 3] == color) {
-                    return true;  // Four consecutive discs found diagonally
+                        board[i - 1][j + 1] == color &&
+                        board[i - 2][j + 2] == color &&
+                        board[i - 3][j + 3] == color) {
+                    return true; // Four consecutive discs found diagonally
                 }
             }
         }
-    
+
         // Check diagonally from top-left to bottom-right
         for (int i = 0; i < ROWS - 3; i++) {
             for (int j = 0; j < COLUMNS - 3; j++) {
                 if (board[i][j] == color &&
-                    board[i + 1][j + 1] == color &&
-                    board[i + 2][j + 2] == color &&
-                    board[i + 3][j + 3] == color) {
-                    return true;  // Four consecutive discs found diagonally
+                        board[i + 1][j + 1] == color &&
+                        board[i + 2][j + 2] == color &&
+                        board[i + 3][j + 3] == color) {
+                    return true; // Four consecutive discs found diagonally
                 }
             }
         }
-    
+
         return false;
     }
     // check win
-    
-    
 
     private void switchPlayer() {
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
@@ -178,28 +174,29 @@ public class ConnectFourGUI extends JFrame {
         SwingUtilities.invokeLater(() -> {
             for (int i = 0; i < ROWS; i++) {
                 for (int j = 0; j < COLUMNS; j++) {
-                    buttons[i][j].setIcon((board[i][j] == 'X') ? createRedCircleIcon() :
-                                           (board[i][j] == 'O') ? createYellowCircleIcon() : null);
-                    buttons[i][j].repaint();  // 強制重新繪製按鈕
+                    buttons[i][j].setIcon((board[i][j] == 'X') ? createRedCircleIcon()
+                            : (board[i][j] == 'O') ? createYellowCircleIcon() : null);
+                    buttons[i][j].repaint(); // 強制重新繪製按鈕
                 }
             }
         });
     }
-    
+
     private class ButtonClickListener implements ActionListener {
         private final int column;
-    
+
         public ButtonClickListener(int column) {
             this.column = column;
         }
-    
+
         @Override
         public void actionPerformed(ActionEvent e) {
             int row = dropPieceToLowestAvailableRow(column);
             if (row != -1 && !checkWin(row, column)) {
                 dropPiece(row, column);
                 if (checkWin(row, column)) {
-                    JOptionPane.showMessageDialog(null, "Player " + (currentPlayer == 'X' ? "red" : "yellow") + " wins!");
+                    JOptionPane.showMessageDialog(null,
+                            "Player " + (currentPlayer == 'X' ? "red" : "yellow") + " wins!");
                     restartGame();
                 } else {
                     // Do not switch automatically, let the player decide when to switch
@@ -208,7 +205,7 @@ public class ConnectFourGUI extends JFrame {
             }
         }
     }
- 
+
     private int dropPieceToLowestAvailableRow(int column) {
         for (int i = ROWS - 1; i >= 0; i--) {
             if (board[i][column] == ' ') {
@@ -217,7 +214,6 @@ public class ConnectFourGUI extends JFrame {
         }
         return -1; // Column is full
     }
-
 
     // image
     private ImageIcon createRedCircleIcon() {
@@ -228,10 +224,6 @@ public class ConnectFourGUI extends JFrame {
         return createCircleIcon("C:/Users/user/Desktop/Small_Game_ConnectFour/src/yellow_circle.png");
     }
 
-    // private ImageIcon createPieceIcon() {
-    //     return createCircleIcon("C:/Users/user/Desktop/sg/src/piece.png");
-    // }
-
     private ImageIcon createCircleIcon(String absolutePath) {
         try {
             Image image = ImageIO.read(new File(absolutePath));
@@ -241,8 +233,7 @@ public class ConnectFourGUI extends JFrame {
         }
         return null;
     }
-    // image 
-    
+    // image
 
     public static void main(String[] args) {
         try {
@@ -250,8 +241,8 @@ public class ConnectFourGUI extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    
+
         SwingUtilities.invokeLater(() -> new ConnectFourGUI());
     }
-    
+
 }
