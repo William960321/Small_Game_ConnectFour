@@ -221,11 +221,11 @@ public class ConnectFourGUI extends JFrame {
 
     // image
     private ImageIcon createRedCircleIcon() {
-        return createCircleIcon("C:/Users/user/Desktop/sg/src/red_circle.png");
+        return createCircleIcon("C:/Users/user/Desktop/Small_Game_ConnectFour/src/red_circle.png");
     }
 
     private ImageIcon createYellowCircleIcon() {
-        return createCircleIcon("C:/Users/user/Desktop/sg/src/yellow_circle.png");
+        return createCircleIcon("C:/Users/user/Desktop/Small_Game_ConnectFour/src/yellow_circle.png");
     }
 
     // private ImageIcon createPieceIcon() {
